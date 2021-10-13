@@ -3,3 +3,8 @@ os: linux
 files:
   - source: index.html
     destination: /home/ec2-user/
+hooks:
+  AfterInstall:
+   - location: setup.sh
+     timeout: 300
+     runas: root
