@@ -27,7 +27,7 @@ jobs:
         id: deploy
         run: |
           aws deploy create-deployment \
-            --application-name Git_Application \
-            --deployment-group-name development_gropup \
+            --application-name Terraform_Git_Application \
+            --deployment-group-name example-group \
             --deployment-config-name CodeDeployDefault.OneAtATime \
             --github-location repository=${{ github.repository }},commitId=${{ github.sha }}
