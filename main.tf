@@ -32,6 +32,7 @@ resource "aws_instance" "terraform_app_server" {
       "sudo yum update -y",
       "echo installing ruby",
       "sudo yum install -y ruby",
+      "service apache2 start",
       "echo installing wget",
       "sudo yum install wget",
       "wget https://aws-codedeploy-us-west-2.s3.us-west-2.amazonaws.com/latest/install",
@@ -50,7 +51,8 @@ resource "aws_instance" "terraform_app_server" {
   }
 
   tags = {
-    Name = "TerraformTestServerInstance"
+    Name        = "TerraformTestServerInstance",
+    development = ""
   }
 }
 
@@ -395,9 +397,8 @@ resource "aws_codedeploy_deployment_group" "terraform_deployment_group" {
   service_role_arn      = aws_iam_role.terraform_codedeploy_role.arn
 
   ec2_tag_filter {
-    key   = "development"
-    type  = "KEY_AND_VALUE"
-    value = "keyvalue"
+    key  = "development"
+    type = "KEY_ONLY"
   }
 
   trigger_configuration {
