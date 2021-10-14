@@ -34,12 +34,17 @@ resource "aws_instance" "terraform_app_server" {
       "sudo yum install -y ruby",
       "sudo yum update httpd",
       "sudo yum install -y httpd",
-      "sudo systemctl start httpd",
-      "sudo systemctl enable httpd",
-      "sudo usermod -a -G apache ec2-user",
+      "sudo yum install -y firewalld",
+      "sudo systemctl enable firewalld",
+      "sudo systemctl start firewalld",
+      "sudo firewall-cmd --permanent --add-service=http",
+      "sudo firewall-cmd --permanent --add-service=https",
       "sudo firewall-cmd ––permanent ––add-port=80/tcp",
       "sudo firewall-cmd ––permanent ––add-port=443/tcp",
       "sudo firewall-cmd --reload",
+      "sudo systemctl start httpd",
+      "sudo systemctl enable httpd",
+      "sudo usermod -a -G apache ec2-user",
       "echo installing wget",
       "sudo yum install wget",
       "wget https://aws-codedeploy-us-west-2.s3.us-west-2.amazonaws.com/latest/install",
@@ -93,6 +98,28 @@ resource "aws_security_group" "main" {
       security_groups  = []
       self             = false
       to_port          = 22
+    },
+    {
+      cidr_blocks      = ["0.0.0.0/0", ]
+      description      = ""
+      from_port        = 80
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      protocol         = "tcp"
+      security_groups  = []
+      self             = false
+      to_port          = 80
+    },
+    {
+      cidr_blocks      = ["0.0.0.0/0", ]
+      description      = ""
+      from_port        = 443
+      ipv6_cidr_blocks = []
+      prefix_list_ids  = []
+      protocol         = "tcp"
+      security_groups  = []
+      self             = false
+      to_port          = 443
     }
   ]
 }

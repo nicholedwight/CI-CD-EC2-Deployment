@@ -6,5 +6,5 @@ files:
 hooks:
   AfterInstall:
    - location: setup.sh
-     timeout: 300
-     runas: root
+     timeout: 800
+     runas: ec2-user
